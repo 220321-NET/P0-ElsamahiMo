@@ -1,6 +1,3 @@
-using Models;
-using BL;
-
 namespace UI;
 
 public class Menu
