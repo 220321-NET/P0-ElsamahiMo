@@ -15,4 +15,14 @@ public class SLBL : ISLBL
     {
         return _repo.CreateCustomer(newCustomer);
     }
+
+    public int LoginCheck(Customer login)
+    {
+        return _repo.LoginCheck(login);
+    }
+
+    public Customer GetCustomer(Customer cust)
+    {
+        return _repo.GetCustomer(cust);
+    }
 }

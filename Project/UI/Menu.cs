@@ -62,14 +62,70 @@ public class Menu
     {
         Transition();
 
+        EnterLogin:
         Console.WriteLine("Please enter your name");
         string? name = Console.ReadLine();
-
         Console.WriteLine("Please enter the password for your account");
         string? password = Console.ReadLine();
 
-        
+        Customer login = new Customer();
 
+        try
+        {
+            login.Name = name;
+            login.Pass = password;
+        }
+        catch (ValidationException e)
+        {
+            Console.WriteLine(e.Message);
+            goto EnterLogin;
+        }
+
+        int results = _b1.LoginCheck(login);
+        switch(results)
+        {
+            case 0:
+                InputLogin0:
+                Console.WriteLine("Account name does not exsist");
+                Console.WriteLine("Try again? (Y/N)");
+                string? responseLogin0 = Console.ReadLine();
+                if (responseLogin0.Trim().ToUpper()[0] == 'Y')
+                    goto EnterLogin;
+                else if (responseLogin0.Trim().ToUpper()[0] == 'N')
+                    break;
+                else 
+                {
+                    Console.WriteLine("Input not recognized");
+                    goto InputLogin0;
+                }
+            case 1: 
+                InputLogin1:
+                Console.WriteLine("Password is incorrect");
+                Console.WriteLine("Try again? (Y/N)");
+                string? responseLogin1 = Console.ReadLine();
+                if (responseLogin1.Trim().ToUpper()[0] == 'Y')
+                    goto EnterLogin;
+                else if (responseLogin1.Trim().ToUpper()[0] == 'N')
+                    break;
+                else 
+                {
+                    Console.WriteLine("Input not recognized");
+                    goto InputLogin1;
+                }
+            case 2:
+                Console.WriteLine("Login successful!");
+                CustomerMenu(login);
+                break;
+
+
+        }
+    }
+
+    public void CustomerMenu(Customer current)
+    {
+
+        Transition();
+        Console.WriteLine($"Welcome {current.Name}.");
     }
 
     public void Signup()

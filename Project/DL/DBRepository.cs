@@ -28,4 +28,59 @@ public class DBRepository : IRepository
         return newCustomer;
     }
 
+    public int LoginCheck (Customer login)
+    {
+        bool found = false;
+        bool correct = false;
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+        
+        using SqlCommand cmd = new SqlCommand("SELECT * FROM Customers WHERE customerName = @customerName", connection);
+
+        cmd.Parameters.AddWithValue("@customerName", login.Name);
+
+        SqlDataReader read = cmd.ExecuteReader();
+        if(read.HasRows)
+            found = true;
+        read.Close();
+
+        using SqlCommand cmd2 = new SqlCommand("SELECT * FROM Customers WHERE customerName = @customerName AND customerPass = @customerPass", connection);
+
+        cmd2.Parameters.AddWithValue("@customerName", login.Name);
+        cmd2.Parameters.AddWithValue("@customerPass", login.Pass);
+
+        SqlDataReader read2 = cmd2.ExecuteReader();
+        if(read2.HasRows)
+            correct = true;
+        read2.Close();
+
+        // if the user name is found and the pass word is correct
+        if(correct)
+            return 2;
+
+        // if the user name is found but the pass word was incorrect
+        if(found)
+            return 1;
+
+        // if the user name wasn't found at all
+        return 0;
+
+    }
+
+    public Customer GetCustomer(Customer cust)
+    {
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+
+        using SqlCommand cmd = new SqlCommand("SELECT * FROM Customers WHERE customerName = @customerName", connection);
+
+        cmd.Parameters.AddWithValue("@customerName", cust.Name);
+
+        cmd.ExecuteScalar();
+        connection.Close();
+
+        return cust;
+    }
+
 }
