@@ -152,12 +152,14 @@ public class DBRepository : IRepository
         read.Close();
         connection.Close();
 
-        return inv;
+        List<Product> SortedList = inv.OrderBy(o=>o.Id).ToList();
+
+        return SortedList;
     }
 
     public void UpdateQuantity(int newQuan, Product replenishPro)
     {
-        
+
     }
 
     public List<Store> GetStores()
