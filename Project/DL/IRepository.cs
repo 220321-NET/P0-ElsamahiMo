@@ -8,4 +8,7 @@ public interface IRepository
     int LoginCheck (Customer login);
     Customer GetCustomer(Customer cust);
     Product CreateProduct(Product newPro);
+    Product GetProduct(int id);
+    List<Product> GetInventory(Store getInv);
+    List<Store> GetStores();
 }

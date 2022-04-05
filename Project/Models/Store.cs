@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Models;
 
-public class store
+public class Store : Default
 {
     private string location = "";
     public string StoreLocation
@@ -14,5 +14,10 @@ public class store
             
             location = value.Trim();
         }
+    }
+
+    public override string ToString()
+    {
+        return $"[{Id}]: {location} ";
     }
 }

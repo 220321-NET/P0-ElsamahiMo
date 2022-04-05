@@ -96,6 +96,66 @@ INSERT INTO Inventory(productID, quantity, storeID) VALUES(
     1
 )
 
+INSERT INTO Inventory(productID, quantity, storeID) VALUES(
+    3,
+    5,
+    1
+)
+
+INSERT INTO Inventory(productID, quantity, storeID) VALUES(
+    6,
+    9,
+    1
+)
+
+INSERT INTO Inventory(productID, quantity, storeID) VALUES(
+    4,
+    20,
+    1
+)
+
+INSERT INTO Inventory(productID, quantity, storeID) VALUES(
+    3,
+    15,
+    2
+)
+
+INSERT INTO Inventory(productID, quantity, storeID) VALUES(
+    5,
+    25,
+    2
+)
+
+INSERT INTO Inventory(productID, quantity, storeID) VALUES(
+    6,
+    15,
+    2
+)
+
+INSERT INTO Inventory(productID, quantity, storeID) VALUES(
+    1,
+    20,
+    3
+)
+
+INSERT INTO Inventory(productID, quantity, storeID) VALUES(
+    2,
+    5,
+    3
+)
+
+INSERT INTO Inventory(productID, quantity, storeID) VALUES(
+    4,
+    30,
+    3
+)
+
+INSERT INTO Inventory(productID, quantity, storeID) VALUES(
+    6,
+    30,
+    3
+)
+
 SELECT * FROM Inventory
 
 DROP TABLE Inventory 

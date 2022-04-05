@@ -2,5 +2,7 @@ namespace Models;
 
 public class Cart
 {
-    public List<Product> items {get; set;}
+    public Product item {get; set;} = new Product();
+
+    public int cartQuan {get; set;}
 }

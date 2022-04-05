@@ -30,4 +30,19 @@ public class SLBL : ISLBL
     {
         return _repo.CreateProduct(newPro);
     }
+
+    public Product GetProduct(int id)
+    {
+        return _repo.GetProduct(id);
+    }
+
+    public List<Product> GetInventory (Store getInv)
+    {
+        return _repo.GetInventory(getInv);
+    }
+
+    public List<Store> GetStores()
+    {
+        return _repo.GetStores();
+    }
 }

@@ -8,11 +8,11 @@ namespace UI;
 public class Menu
 {
 
-    private readonly ISLBL _b1;
+    private readonly ISLBL _bl;
 
-    public Menu(ISLBL b1)
+    public Menu(ISLBL bl)
     {
-        _b1 = b1;
+        _bl = bl;
     }
 
     public void Start()
@@ -80,7 +80,7 @@ public class Menu
             goto EnterLogin;
         }
 
-        int results = _b1.LoginCheck(login);
+        int results = _bl.LoginCheck(login);
         switch(results)
         {
             case 0:
@@ -121,35 +121,40 @@ public class Menu
     }
 
     public void CustomerMenu(Customer current)
-    {
-        CustomerMenuInput:
-        Transition();
-        Console.WriteLine($"Welcome {current.Name}.");
-        Console.WriteLine("What would you like to do today?");
-        Console.WriteLine("[0]: Shop games");
-        Console.WriteLine("[1]: View cart");
-        Console.WriteLine("[2]: View order history");
-        Console.WriteLine("[3]: Delete Account");
-        Console.WriteLine("[x]: Go back");
-        string? cmResponse = Console.ReadLine();
-
-        switch(cmResponse.Trim().ToUpper()[0])
+    {   
+        bool customerExit = false;
+        do
         {
-            case '0':
-                break;
-            case '1':
-                break;
-            case '2':
-                break;
-            case '3':
-                break;
-            case 'X': 
-                break;
-            default:
-                Console.WriteLine("Input not acceppted, Please try again.");
-                goto CustomerMenuInput;
+            CustomerMenuInput:
+            Transition();
+            Console.WriteLine($"Welcome {current.Name}.");
+            Console.WriteLine("What would you like to do today?");
+            Console.WriteLine("[0]: Shop games");
+            Console.WriteLine("[1]: View cart");
+            Console.WriteLine("[2]: View order history");
+            Console.WriteLine("[3]: Delete Account");
+            Console.WriteLine("[x]: Go back");
+            string? cmResponse = Console.ReadLine();
 
-        }
+            switch(cmResponse.Trim().ToUpper()[0])
+            {
+                case '0':
+                    ShopGames();
+                    break;
+                case '1':
+                    break;
+                case '2':
+                    break;
+                case '3':
+                    break;
+                case 'X':
+                    customerExit = true;
+                    break;
+                default:
+                    Console.WriteLine("Input not acceppted, Please try again.");
+                    goto CustomerMenuInput;
+            }
+        }while(!customerExit);
     }
 
     public void Signup()
@@ -177,45 +182,125 @@ public class Menu
             goto EnterCustomerInfo;
         }
 
-        Customer createdCustomer = _b1.CreateCustomer(newCustomer);
+        Customer createdCustomer = _bl.CreateCustomer(newCustomer);
         if (createdCustomer != null)
             Console.WriteLine("\nAccount created successfully");
     }
 
-    public void Admin()
+    public void ShopGames()
     {
         Transition();
-        Console.WriteLine("Welcome to the Admin Menu");
-        Console.WriteLine("[0]: Replenish Stocks");
-        Console.WriteLine("[1]: View Inventory");
-        Console.WriteLine("[2]: Add Product");
-        Console.WriteLine("[x]: Go back");
+        Console.WriteLine("Which store would you like to shop at?");
+        Store shopAt = SelectStore();
 
-        AdminInput:
-            string? response = Console.ReadLine();
+        Console.WriteLine("Select the game you would like to add to your cart.");
+        Product shopPro = SelectInventory(shopAt);
 
-            switch(response.Trim().ToUpper()[0])
-            {
-                case '0': 
+        shopConfirm:
+        Console.WriteLine($"Are you should you would like to add \n{shopPro.ItemName} at ${shopPro.Price} to your cart (Y/N)");
+        string shopInput = Console.ReadLine();
 
-                    break;
-                case '1':
+        switch(shopInput.Trim().ToUpper()[0])
+        {
+            case 'Y':
+                AddToCart(shopPro);
+                break;
+            case 'N':
+                Console.WriteLine("Item not added to cart");
+                break;
+            default:
+                Console.WriteLine("Invalid input, Try again");
+                goto shopConfirm;
+                break;
+        }
 
-                    break;
-                case '2':
-                    AddProduct();
-                    break;
-                case 'X':
-                    break;
-                default:
-                    Console.WriteLine("Input not acceppted, Please try again.");
-                    goto AdminInput;
-            }
     }
 
-    public Inventory GetInventory()
+    public void AddToCart(Product shopCart)
     {
-        return null;
+
+    }
+    public void Admin()
+    {
+        bool adminExit = false;
+        do
+        {
+            Transition();
+            Console.WriteLine("Welcome to the Admin Menu");
+            Console.WriteLine("[0]: Replenish Stocks");
+            Console.WriteLine("[1]: View Inventory");
+            Console.WriteLine("[2]: Add Product");
+            Console.WriteLine("[x]: Go back");
+
+            AdminInput:
+                string? response = Console.ReadLine();
+
+                switch(response.Trim().ToUpper()[0])
+                {
+                    case '0': 
+                        ReplenishStock();
+                        break;
+                    case '1':
+                        ViewInventory();
+                        break;
+                    case '2':
+                        AddProduct();
+                        break;
+                    case 'X':
+                        adminExit = true;
+                        break;
+                    default:
+                        Console.WriteLine("Input not acceppted, Please try again.");
+                        goto AdminInput;
+                }
+        }while(!adminExit);
+    }
+
+    public Store? SelectStore()
+    {
+        Console.WriteLine("Here are all the stores by state: ");
+        List<Store> allStores = _bl.GetStores();
+
+        if(allStores.Count == 0)
+            return null;
+
+        SelectInput:
+        for (int i = 0; i < allStores.Count; i++)
+            Console.WriteLine(allStores[i].ToString());
+
+        int select;
+
+        if(Int32.TryParse(Console.ReadLine(), out select) && ((select-1) >= 0 && (select-1) < allStores.Count))
+            return allStores[select-1];
+        else
+        {
+            Console.WriteLine("Invalid input, Try again");
+            goto SelectInput;
+        }
+    } 
+
+    public Product SelectInventory(Store getInv)
+    {
+        Transition();
+        Console.WriteLine($"Here is the Inventory for the {getInv.StoreLocation} store:");
+        List<Product> inventory = _bl.GetInventory(getInv);
+
+        if (inventory.Count == 0)
+            return null;
+        
+        InvInput:
+        for (int i = 0; i < inventory.Count; i++)
+            Console.WriteLine(inventory[i].ToString());
+        
+        int proSelect;
+
+        if(Int32.TryParse(Console.ReadLine(), out proSelect) && ((proSelect-1) >= 0 && (proSelect-1) < inventory.Count))
+            return inventory[proSelect-1];
+        else
+        {
+            Console.WriteLine("Invalid input, Try again");
+            goto InvInput;
+        }
     }
 
     public void AddProduct() 
@@ -242,8 +327,52 @@ public class Menu
             goto EnterProductInfo;
         }
 
-        Product createdProduct = _b1.CreateProduct(newPro);
+        Product createdProduct = _bl.CreateProduct(newPro);
         if (createdProduct != null)
             Console.WriteLine("\nProduct created successfully");
     }
+
+    public void ReplenishStock()
+    {
+        Transition();
+        Console.WriteLine("Please choose a location to replenish stocks at");
+        Store? replenishStore = SelectStore();
+
+        Product? replenishPro = SelectInventory(replenishStore);
+
+        Console.WriteLine($"Please enter the new quantity of {replenishPro.ItemName}");
+        int newQuan = Convert.ToInt32(Console.ReadLine());
+
+        //pausing this to work on neccessary implementation 
+        //_bl.UpdateQuantity(newQuan, replenishPro);
+
+
+
+
+
+        
+    }
+
+    public void ViewInventory()
+    {
+        Transition();
+        Console.WriteLine("Which store would you like to view the inventory for?");
+        Store? viewStore = SelectStore();
+
+        Console.WriteLine($"Here is the Inventory for the {viewStore.StoreLocation} store:");
+        List<Product> inventory = _bl.GetInventory(viewStore);
+
+        if (inventory.Count == 0)
+        {
+            Console.WriteLine("This store has no inventory");
+            return;
+        }
+        for (int i = 0; i < inventory.Count; i++)
+            Console.WriteLine(inventory[i].ToString());
+
+        Console.WriteLine("Press any key to continue");
+        string temp = Console.ReadLine();
+        
+    }
+
 }

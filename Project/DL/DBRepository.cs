@@ -99,4 +99,93 @@ public class DBRepository : IRepository
         return newPro;
     }
 
+    public Product GetProduct(int id)
+    {   
+
+        Product temp = new Product();
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+
+        using SqlCommand cmd = new SqlCommand("SELECT * FROM Products WHERE id = @productId", connection);
+        cmd.Parameters.AddWithValue("@productId", id);
+        
+        SqlDataReader read = cmd.ExecuteReader();
+
+        if(read.Read())
+        {
+            int tempID = read.GetInt32(0);
+            string name = read.GetString(1);
+            double price = read.GetDouble(2);
+        
+            temp.Id = tempID;
+            temp.ItemName = name;
+            temp.Price = price;
+            
+        }
+
+        
+
+        return temp;
+
+    }
+
+    public List<Product> GetInventory(Store getInv)
+    {
+
+        List<Product> inv = new List<Product>();
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+
+        using SqlCommand cmd = new SqlCommand("SELECT * FROM Inventory WHERE storeID = @storeId", connection);
+        cmd.Parameters.AddWithValue("@storeId", getInv.Id);
+        
+        SqlDataReader read = cmd.ExecuteReader();
+
+        while(read.Read())
+        {
+            Product tempPro = GetProduct(read.GetInt32(2));
+            inv.Add(tempPro);
+        }
+
+        read.Close();
+        connection.Close();
+
+        return inv;
+    }
+
+    public void UpdateQuantity(int newQuan, Product replenishPro)
+    {
+        
+    }
+
+    public List<Store> GetStores()
+    {
+        List<Store> allStores = new List<Store>();
+
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+
+        using SqlCommand cmd = new SqlCommand("SELECT * FROM Stores", connection);
+        SqlDataReader read = cmd.ExecuteReader();
+
+        while(read.Read())
+        {
+            int id = read.GetInt32(0);
+            string location = read.GetString(1);
+
+            Store tempStore = new Store{
+                Id = id,
+                StoreLocation = location
+            };
+            allStores.Add(tempStore);
+        }
+
+        read.Close();
+        connection.Close();
+
+        return allStores;
+    }
+
 }

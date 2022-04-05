@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 namespace Models;
 
-public class Product
+public class Product : Default
 {
     private string itemName = "";
-    private double price = 0.00;
+    private double price = 0.00f;
 
     public string ItemName
     {
@@ -27,5 +27,10 @@ public class Product
             
             price = value;
         }
+    }
+
+    public override string ToString()
+    {
+        return $"[{Id}]: {itemName} ";
     }
 }
