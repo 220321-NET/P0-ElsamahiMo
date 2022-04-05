@@ -39,7 +39,6 @@ public class Menu
                     break;
                 case "14383421":
                     Admin();
-                    Console.WriteLine("Secret, Congrats.");
                     break;
                 case "X":
                     Console.WriteLine("Goodbye.");
@@ -123,9 +122,34 @@ public class Menu
 
     public void CustomerMenu(Customer current)
     {
-
+        CustomerMenuInput:
         Transition();
         Console.WriteLine($"Welcome {current.Name}.");
+        Console.WriteLine("What would you like to do today?");
+        Console.WriteLine("[0]: Shop games");
+        Console.WriteLine("[1]: View cart");
+        Console.WriteLine("[2]: View order history");
+        Console.WriteLine("[3]: Delete Account");
+        Console.WriteLine("[x]: Go back");
+        string? cmResponse = Console.ReadLine();
+
+        switch(cmResponse.Trim().ToUpper()[0])
+        {
+            case '0':
+                break;
+            case '1':
+                break;
+            case '2':
+                break;
+            case '3':
+                break;
+            case 'X': 
+                break;
+            default:
+                Console.WriteLine("Input not acceppted, Please try again.");
+                goto CustomerMenuInput;
+
+        }
     }
 
     public void Signup()
@@ -164,24 +188,62 @@ public class Menu
         Console.WriteLine("Welcome to the Admin Menu");
         Console.WriteLine("[0]: Replenish Stocks");
         Console.WriteLine("[1]: View Inventory");
+        Console.WriteLine("[2]: Add Product");
         Console.WriteLine("[x]: Go back");
 
-        Input:
+        AdminInput:
             string? response = Console.ReadLine();
 
-            switch(response.Trim().ToUpper())
+            switch(response.Trim().ToUpper()[0])
             {
-                case "0": 
+                case '0': 
 
                     break;
-                case "1 ":
+                case '1':
 
                     break;
-                case "X":
+                case '2':
+                    AddProduct();
+                    break;
+                case 'X':
                     break;
                 default:
                     Console.WriteLine("Input not acceppted, Please try again.");
-                    goto Input;
+                    goto AdminInput;
             }
+    }
+
+    public Inventory GetInventory()
+    {
+        return null;
+    }
+
+    public void AddProduct() 
+    {
+        Transition();
+        
+        EnterProductInfo:
+        Console.WriteLine("What is the name of the game you would like to add?");
+        string? proName = Console.ReadLine();
+
+        Console.WriteLine("What is the price?");
+        double? proPrice = Convert.ToDouble(Console.ReadLine());
+
+        Product newPro = new Product();
+
+        try
+        {
+            newPro.ItemName = proName;
+            newPro.Price = proPrice.Value;
+        }
+        catch (ValidationException e)
+        {
+            Console.WriteLine(e.Message);
+            goto EnterProductInfo;
+        }
+
+        Product createdProduct = _b1.CreateProduct(newPro);
+        if (createdProduct != null)
+            Console.WriteLine("\nProduct created successfully");
     }
 }

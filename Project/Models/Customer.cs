@@ -16,7 +16,7 @@ public class Customer : Default
             if(String.IsNullOrWhiteSpace(value))
                 throw new ValidationException("Name cannot be empty");
             
-            name = value;
+            name = value.Trim();
         }
     }
 
@@ -28,7 +28,7 @@ public class Customer : Default
             if(String.IsNullOrWhiteSpace(value))
                 throw new ValidationException("Password cannot be empty");
             
-            pass = value;
+            pass = value.Trim();
         }
     }
 

@@ -56,22 +56,18 @@ DROP TABLE Products
 
 CREATE TABLE Stores(
     id INT PRIMARY KEY IDENTITY (1,1),
-    storeCity VARCHAR(50) NOT NULL,
-    storeState VARCHAR(50) NOT NULL
+    storeLocation VARCHAR (100) NOT NULL
 )
 
-INSERT INTO Stores(storeCity, storeState) VALUES(
-    'Dover',
+INSERT INTO Stores(storeLocation) VALUES(
     'New Jersey'
 )
 
-INSERT INTO Stores(storeCity, storeState) VALUES(
-    'Gotha',
+INSERT INTO Stores(storeLocation) VALUES(
     'Florida'
 )
 
-INSERT INTO Stores(storeCity, storeState) VALUES(
-    'Newport',
+INSERT INTO Stores(storeLocation) VALUES(
     'Kentucky'
 )
 

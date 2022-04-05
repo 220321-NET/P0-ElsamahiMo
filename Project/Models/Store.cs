@@ -1,7 +1,18 @@
+using System.ComponentModel.DataAnnotations;
 using Models;
 
 public class store
 {
-    public List<Item> Inventory {get; set;}
-    public string location {get; set;}
+    private string location = "";
+    public string StoreLocation
+    {
+        get => location;
+        set
+        {
+            if(String.IsNullOrWhiteSpace(value))
+                throw new ValidationException("Name cannot be empty");
+            
+            location = value.Trim();
+        }
+    }
 }

@@ -25,4 +25,9 @@ public class SLBL : ISLBL
     {
         return _repo.GetCustomer(cust);
     }
+
+    public Product CreateProduct(Product newPro)
+    {
+        return _repo.CreateProduct(newPro);
+    }
 }

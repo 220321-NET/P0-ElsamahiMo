@@ -83,4 +83,20 @@ public class DBRepository : IRepository
         return cust;
     }
 
+    public Product CreateProduct(Product newPro)
+    {
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+
+        using SqlCommand cmd = new SqlCommand("INSERT INTO Products(productName, price) OUTPUT INSERTED.Id VALUES (@productName, @price)", connection);
+
+        cmd.Parameters.AddWithValue("@productName", newPro.ItemName);
+        cmd.Parameters.AddWithValue("@price", newPro.Price);
+
+        cmd.ExecuteScalar();
+        connection.Close();
+
+        return newPro;
+    }
+
 }
