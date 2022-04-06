@@ -164,9 +164,8 @@ DROP TABLE Inventory
 
 CREATE TABLE Orders(
     id INT PRIMARY KEY IDENTITY (1,1),
-    dateCreated DATE NOT NULL,
+    dateCreated DATETIME NULL,
     total FLOAT,
-    placed BIT NOT NULL,
     storeID INT NOT NULL FOREIGN KEY REFERENCES Stores(id),
     customerID INT NOT NULL FOREIGN KEY REFERENCES Customers(id) ON DELETE CASCADE
 )
@@ -174,16 +173,3 @@ CREATE TABLE Orders(
 SELECT * FROM Orders 
 
 DROP TABLE Orders
-
---------------------------------------------------------------------------------
-
-CREATE TABLE CartItems(
-    id INT PRIMARY KEY IDENTITY (1,1),
-    quantity INT NOT NULL,
-    productID INT NOT NULL FOREIGN KEY REFERENCES Products(id),
-    orderID INT NOT NULL FOREIGN KEY REFERENCES Orders(id)
-)
-
-SELECT * FROM CartItems 
-
-DROP TABLE CartItems 

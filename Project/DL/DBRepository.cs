@@ -70,17 +70,32 @@ public class DBRepository : IRepository
 
     public Customer GetCustomer(Customer cust)
     {
+        Customer returnCust = new Customer();
+
         using SqlConnection connection = new SqlConnection(_connectionString);
         connection.Open();
 
         using SqlCommand cmd = new SqlCommand("SELECT * FROM Customers WHERE customerName = @customerName", connection);
-
         cmd.Parameters.AddWithValue("@customerName", cust.Name);
 
-        cmd.ExecuteScalar();
+        SqlDataReader read = cmd.ExecuteReader();
+
+        if(read.Read())
+        {
+            int tempID = read.GetInt32(0);
+            string name = read.GetString(1);
+            string pass = read.GetString(2);
+        
+            returnCust.Id = tempID;
+            returnCust.Name = name;
+            returnCust.Pass= pass;
+            
+        }
+
+        read.Close();
         connection.Close();
 
-        return cust;
+        return returnCust;
     }
 
     public Product CreateProduct(Product newPro)
@@ -160,6 +175,32 @@ public class DBRepository : IRepository
     public void UpdateQuantity(int newQuan, Product replenishPro)
     {
 
+    }
+
+    public Order UpdateOrders(Order updateOrder)
+    {
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+
+        using SqlCommand cmd = new SqlCommand("INSERT INTO Orders(dateCreated, total, storeID, customerID) OUTPUT INSERTED.Id VALUES (@date, @total, @storeID, @customerID)", connection);
+
+        cmd.Parameters.AddWithValue("@date", updateOrder.DateCreated);
+        cmd.Parameters.AddWithValue("@total", updateOrder.Total());
+        cmd.Parameters.AddWithValue("@storeID", updateOrder.StoreID);
+        cmd.Parameters.AddWithValue("@customerID", updateOrder.CustID);
+
+        try
+        {
+            updateOrder.Id = (int) cmd.ExecuteScalar();
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        
+        connection.Close();
+
+        return updateOrder;
     }
 
     public List<Store> GetStores()

@@ -10,4 +10,5 @@ public interface ISLBL
     Product GetProduct(int id);
     List<Product> GetInventory(Store getInv);
     List<Store> GetStores();
+    Order UpdateOrders(Order updateOrder);
 }

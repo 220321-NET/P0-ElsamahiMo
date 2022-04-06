@@ -45,4 +45,9 @@ public class SLBL : ISLBL
     {
         return _repo.GetStores();
     }
+
+    public Order UpdateOrders(Order updateOrder)
+    {
+        return _repo.UpdateOrders(updateOrder);
+    }
 }
